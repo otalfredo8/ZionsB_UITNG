@@ -11,17 +11,18 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 
 
 public class Driver {
-    private Driver() {
-    }
 
     private static ThreadLocal<WebDriver> driverPool = new ThreadLocal<WebDriver>();
 
@@ -38,8 +39,21 @@ public class Driver {
 
             switch (browser) {
                 case "chrome":
+
                     WebDriverManager.chromedriver().setup();
-                    driverPool.set(new ChromeDriver());
+
+                    ChromeOptions options = new ChromeOptions();
+////                    options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+////                    options.addArguments("--disable-extensions");
+////                    options.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
+////
+////                    DesiredCapabilities chrome = DesiredCapabilities.chrome();
+////                    chrome.setJavascriptEnabled(true);
+////                    options.setCapability(ChromeOptions.CAPABILITY, options);
+//
+                    options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+                    options.setExperimentalOption("useAutomationExtension", false);
+                    driverPool.set(new ChromeDriver(options));
                     break;
                 case "chrome-headless":
                     WebDriverManager.chromedriver().setup();
@@ -59,21 +73,18 @@ public class Driver {
                     WebDriverManager.iedriver().setup();
                     driverPool.set(new InternetExplorerDriver());
                     break;
-
                 case "edge":
                     if (!System.getProperty("os.name").toLowerCase().contains("windows"))
                         throw new WebDriverException("Your OS doesn't support Edge");
                     WebDriverManager.edgedriver().setup();
                     driverPool.set(new EdgeDriver());
                     break;
-
                 case "safari":
                     if (!System.getProperty("os.name").toLowerCase().contains("mac"))
                         throw new WebDriverException("Your OS doesn't support Safari");
                     WebDriverManager.getInstance(SafariDriver.class).setup();
                     driverPool.set(new SafariDriver());
                     break;
-
                 case "remote-chrome":
                     try {
                         URL url = new URL("http://3.86.148.247:4444/wd/hub");
