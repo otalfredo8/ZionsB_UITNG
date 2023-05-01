@@ -12,7 +12,7 @@
 
         <webdrivermanager.version>4.0.0</webdrivermanager.version>
         <selenium-java.version>3.141.59</selenium-java.version>
-        <testng.version>7.1.0</testng.version>
+        <testng.version>7.7.0</testng.version>
         <cucumber-java.version>6.1.1</cucumber-java.version>
         <cucumber-testng.version>6.1.1</cucumber-testng.version>
         <cucumber-junit.version>6.1.1</cucumber-junit.version>
